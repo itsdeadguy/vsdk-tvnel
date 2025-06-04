@@ -96,14 +96,15 @@ class TvnelGame(Scene):
                 f.set_frame(randrange(3))
 
     def step(self):
+        self.hiscore += 2
         if self.intermediateFramesFallSpeedCounter > self.intermediateFramesFallSpeed:
             self.animar_paisaje()
+            self.scoreboard.setscore(self.hiscore)
             self.intermediateFramesFallSpeedCounter = 0
         else:
             self.intermediateFramesFallSpeedCounter += 1
 
         self.running_frame += 1
-        self.hiscore += 2
         pf = (self.running_frame // 4) % 4
         self.monchito.set_frame(pf)
 
@@ -111,12 +112,14 @@ class TvnelGame(Scene):
             if self.intermediateFramesFallSpeed > -2:
                 self.intermediateFramesFallSpeed -= 1
                 self.hiscore += 5
+                self.scoreboard.setscore(self.hiscore)
                 print(self.intermediateFramesFallSpeed)
 
         if director.is_pressed(director.JOY_DOWN):
             if self.intermediateFramesFallSpeed < 4:
                 self.intermediateFramesFallSpeed += 1
                 self.hiscore += 1
+                self.scoreboard.setscore(self.hiscore)
                 print(self.intermediateFramesFallSpeed)
 
         """
