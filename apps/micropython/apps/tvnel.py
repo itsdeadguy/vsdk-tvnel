@@ -45,6 +45,21 @@ class ScoreBoard:
             self.chars[n].set_frame(v)
 
 
+class Splat:
+    def __init__(self, scene):
+        self.game_over_sprite = Sprite()
+        self.game_over_sprite.set_x(256 - 32)
+        self.game_over_sprite.set_y(0)
+        self.game_over_sprite.set_perspective(2)
+        self.game_over_sprite.set_strip(stripes["gameover.png"])
+        self.scene = scene
+
+    def game_over(self):
+        director.music_play("tvnel/killed")
+        self.game_over_sprite.set_frame(0)
+        self.scene.call_later(8333, self.scene.finished)
+
+
 class TvnelGame(Scene):
     stripes_rom = "tvnel"
 
@@ -52,6 +67,7 @@ class TvnelGame(Scene):
         super(TvnelGame, self).on_enter()
         self.scoreboard = ScoreBoard()
         self.hiscore = 0
+        self.splatted = Splat(self)
 
         self.monchito = Sprite()
         self.monchito.set_x(0)

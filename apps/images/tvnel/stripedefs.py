@@ -7,9 +7,11 @@ stripes = [
         strip("moregrass.png", frames=4),
         strip("bricks.png"),
         strip("numerals.png", frames=12),
+        strip("gameover.png"),
     ),
     palettegroup(
         fullscreen("fondo2.png"),
         fullscreen("bottom.png"),
     ),
 ]
+
