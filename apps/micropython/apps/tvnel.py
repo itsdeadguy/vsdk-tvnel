@@ -1,12 +1,13 @@
 from urandom import choice, randrange, seed
+import utime
 from ventilastation.director import director, stripes
 from ventilastation.scene import Scene
 from ventilastation.sprites import Sprite
 
 
 TUNNEL_COLS = 8
-TUNNEL_ROWS = 11
-# TUNNEL_ROWS = 5
+# TUNNEL_ROWS = 11
+TUNNEL_ROWS = 5
 TILE_WIDTH = 32
 TILE_HEIGHT = 16
 TUNNEL_START = 8
@@ -40,7 +41,7 @@ class ScoreBoard:
         self.setscore(0)
 
     def setscore(self, value):
-        for n, l in enumerate("%05d" % value):
+        for n, l in enumerate("%07d" % value):
             v = ord(l) - 0x30
             self.chars[n].set_frame(v)
 
@@ -67,6 +68,7 @@ class TvnelGame(Scene):
         super(TvnelGame, self).on_enter()
         self.scoreboard = ScoreBoard()
         self.hiscore = 0
+        self.scorediff = utime.ticks_ms()
         self.splatted = Splat(self)
 
         self.monchito = Sprite()
@@ -87,9 +89,9 @@ class TvnelGame(Scene):
             for y in range(TUNNEL_ROWS):
                 sf = Sprite()
                 self.fondos[(x, y)] = sf
-                sf.set_strip(stripes["moregrass.png"])
-                # sf.set_strip(stripes["bricks.png"])
-                # sf.set_x(COLS_CENTERS[x] - TILE_WIDTH // 2)"])
+                # sf.set_strip(stripes["moregrass.png"])
+                sf.set_strip(stripes["bricks.png"])
+                sf.set_x(COLS_CENTERS[x] - TILE_WIDTH // 2)
                 sf.set_x(x * TILE_WIDTH)
                 sf.set_y(y * TILE_HEIGHT)
                 print(sf.y())
@@ -112,7 +114,9 @@ class TvnelGame(Scene):
                 f.set_frame(randrange(3))
 
     def step(self):
-        self.hiscore += 2
+        # self.hiscore += 2
+        # self.hiscore = utime.ticks_ms() / 1000
+        self.hiscore = utime.ticks_diff(utime.ticks_ms(), self.scorediff) / 750
         if self.intermediateFramesFallSpeedCounter > self.intermediateFramesFallSpeed:
             self.animar_paisaje()
             self.scoreboard.setscore(self.hiscore)
@@ -127,15 +131,17 @@ class TvnelGame(Scene):
         if director.is_pressed(director.JOY_UP):
             if self.intermediateFramesFallSpeed > -2:
                 self.intermediateFramesFallSpeed -= 1
-                self.hiscore += 5
+                self.hiscore = utime.ticks_diff(utime.ticks_ms(), self.scorediff) / 250
                 self.scoreboard.setscore(self.hiscore)
+                print(self.hiscore)
                 print(self.intermediateFramesFallSpeed)
 
         if director.is_pressed(director.JOY_DOWN):
             if self.intermediateFramesFallSpeed < 4:
                 self.intermediateFramesFallSpeed += 1
-                self.hiscore += 1
+                self.hiscore = utime.ticks_diff(utime.ticks_ms(), self.scorediff) / 2000
                 self.scoreboard.setscore(self.hiscore)
+                print(self.hiscore)
                 print(self.intermediateFramesFallSpeed)
 
         """
