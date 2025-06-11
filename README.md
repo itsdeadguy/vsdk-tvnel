@@ -15,7 +15,6 @@ The emulator has been tested on modern Linux, macOS and Windows.
 
 - [Linux setup](docs/emulator-setup.Linux.md)
 - [macOS setup](docs/emulator-setup.macOS.md)
-- [Windows setup](docs/emulator-setup.Windows.md)
 
 # Build your own Ventilastation
 
